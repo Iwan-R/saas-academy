@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #5A4BFF;
+    --primary-light: #7A5CFF;
+    --pink: #FF4DA6;
+    --orange: #FF8A4C;
+    --dark: #070710;
+    --dark2: #0e0e1a;
+    --dark3: #13131f;
+    --card: #111120;
+    --border: rgba(90,75,255,0.18);
+    --text: #f0f0ff;
+    --muted: rgba(240,240,255,0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { background: #070710; overflow-x: hidden; max-width: 100%; }
+
+  body {
+    background: #070710;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .sticky-badge {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(90,75,255,0.15);
+    border: 1px solid rgba(90,75,255,0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 100px;
+    padding: 10px 22px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--primary-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 999;
+    white-space: nowrap;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  .sticky-badge .dot {
+    width: 8px; height: 8px;
+    background: var(--pink);
+    border-radius: 50%;
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes pulse-badge { 0%,100%{box-shadow:0 0 0 0 rgba(90,75,255,0.3)} 50%{box-shadow:0 0 20px 4px rgba(90,75,255,0.15)} }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 24px 100px;
+    position: relative;
+    text-align: center;
+    background: #070710;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(90,75,255,0.15) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero > * { position: relative; z-index: 1; }
+
+  .places-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,77,166,0.12);
+    border: 1px solid rgba(255,77,166,0.3);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--pink);
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+    animation: fadeUp 0.7s ease 0.1s both;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 480px) { .hero-title { font-size: 72px; } }
+  @media (min-width: 768px) { .hero-title { font-size: 110px; } }
+
+  .hero-title .line1 { display: block; color: var(--text); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--primary), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 340px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+  .hero-sub strong { color: var(--text); }
+
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 440px;
+    animation: fadeUp 0.8s ease 0.3s both;
+    position: relative;
+    overflow: hidden;
+  }
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  }
+  .form-card h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .form-card > p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; color: var(--text); }
+  .field label .req { color: var(--pink); margin-left: 3px; }
+  .field input, .field select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235A4BFF' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .field input::placeholder { color: rgba(255,255,255,0.2); }
+  .field input:focus, .field select:focus { border-color: var(--primary); }
+  .field select option { background: #111; color: #fff; }
+
+  .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--pink));
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .form-note { text-align: center; font-size: 11px; color: var(--muted); margin-top: 12px; text-decoration: underline; cursor: pointer; }
+
+  /* SUCCESS */
+  .success-card {
+    background: var(--card);
+    border: 1px solid rgba(90,75,255,0.25);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+  }
+  .check-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(90,75,255,0.15);
+    border: 2px solid var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 24px;
+  }
+  .success-card h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .success-card > p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 28px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: opacity 0.2s;
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-whatsapp:hover { opacity: 0.9; }
+
+  .action-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+  .action-card {
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px;
+    cursor: pointer; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .action-card:hover { border-color: var(--primary); background: rgba(90,75,255,0.06); }
+  .action-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .action-icon.purple { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+  .action-icon.pink { background: linear-gradient(135deg, var(--pink), var(--orange)); }
+  .action-card-text { text-align: left; flex: 1; }
+  .action-card-text strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 2px; color: var(--text); }
+  .action-card-text span { font-size: 12px; color: var(--muted); }
+  .action-card-arrow { color: var(--muted); font-size: 18px; }
+
+  .motivated-card {
+    background: rgba(255,77,166,0.05);
+    border: 1px solid rgba(255,77,166,0.2);
+    border-radius: 16px; padding: 20px; text-align: center;
+  }
+  .motivated-card .fire { font-size: 28px; margin-bottom: 10px; }
+  .motivated-card h4 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .motivated-card p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+  .motivated-btns { display: flex; gap: 10px; }
+  .btn-later { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+  .btn-later:hover { background: rgba(255,255,255,0.08); }
+  .btn-now { flex: 1; background: linear-gradient(135deg, var(--primary), var(--pink)); border: none; border-radius: 12px; padding: 12px; color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; }
+  .btn-now:hover { opacity: 0.9; }
+
+  /* PAYMENT */
+  .payment-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+  .payment-card::before {
+    content: '';
+    position: absolute; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, var(--primary), var(--pink), transparent);
+  }
+  .payment-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary), var(--pink)); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 20px; }
+  .payment-card h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+  .payment-card .sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+  .price-box { background: rgba(90,75,255,0.08); border: 1px solid rgba(90,75,255,0.2); border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+  .invest-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: var(--primary-light); background: rgba(90,75,255,0.12); border: 1px solid rgba(90,75,255,0.25); border-radius: 100px; padding: 5px 12px; margin-bottom: 12px; }
+  .price-display { display: flex; align-items: baseline; justify-content: center; gap: 12px; margin-bottom: 6px; }
+  .price-old { font-size: 22px; color: var(--muted); text-decoration: line-through; }
+  .price-new { font-family: 'Syne', sans-serif; font-size: 52px; font-weight: 800; color: var(--text); }
+  .price-new sup { font-size: 24px; vertical-align: super; }
+  .price-note { font-size: 12px; color: var(--muted); }
+
+  .features-list { list-style: none; text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .features-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+  .features-list li .check { color: var(--primary); font-size: 16px; }
+
+  .email-field { margin-bottom: 16px; text-align: left; }
+  .email-field label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .email-input-wrap { position: relative; }
+  .email-input-wrap .mail-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 16px; }
+  .email-input-wrap input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px 14px 42px; color: var(--text); font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+  .email-input-wrap input:focus { border-color: var(--primary); }
+  .email-input-wrap input::placeholder { color: rgba(255,255,255,0.2); }
+
+  .promo-link { font-size: 13px; color: var(--muted); text-decoration: underline; cursor: pointer; margin-bottom: 20px; display: block; text-align: center; }
+
+  .btn-pay { width: 100%; background: linear-gradient(135deg, var(--primary), var(--pink)); border: none; border-radius: 14px; padding: 18px; color: #fff; font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.2s, transform 0.2s; margin-bottom: 12px; }
+  .btn-pay:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .security-note { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-align: center; margin-bottom: 20px; }
+  .payment-footer { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .payment-footer a { font-size: 13px; color: var(--muted); text-decoration: none; cursor: pointer; }
+  .payment-footer a:hover { color: var(--text); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .page { display: none; flex-direction: column; align-items: center; width: 100%; }
+  .page.active { display: flex; }
+</style>
+</head>
+<body>
+
+<div class="sticky-badge">
+  <span class="dot"></span>
+  PLUS QUE 7 PLACES DISPONIBLES
+</div>
+
+<!-- PAGE 1 : LANDING -->
+<div class="page active" id="page-landing">
+  <div class="hero">
+    <div class="places-badge">⭐ PLACES LIMITÉES</div>
+    <h1 class="hero-title">
+      <span class="line1">SAAS</span>
+      <span class="line2">ACADEMY</span>
+    </h1>
+    <p class="hero-sub">
+      Candidate pour rejoindre la formation SaaS la plus complète.<br>
+      <strong>De l'idée au SaaS qui rapporte. Sans expérience, sans excuse.</strong>
+    </p>
+
+    <div class="form-card">
+      <h2>Ta candidature</h2>
+      <p>Remplis le formulaire pour postuler</p>
+
+      <div class="field">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" id="f-prenom" placeholder="Ton prénom" />
+      </div>
+      <div class="field">
+        <label>Âge <span class="req">*</span></label>
+        <input type="number" id="f-age" placeholder="20" />
+      </div>
+      <div class="field">
+        <label>Téléphone <span class="req">*</span></label>
+        <input type="tel" id="f-tel" placeholder="+33 6 12 34 56 78" />
+      </div>
+      <div class="field">
+        <label>T'as déjà lancé quelque chose ? <span class="req">*</span></label>
+        <select id="f-xp">
+          <option value="">Sélectionne une option</option>
+          <option>Jamais — c'est ma première fois</option>
+          <option>J'ai essayé mais sans résultat</option>
+          <option>J'ai un petit projet qui tourne</option>
+          <option>J'ai déjà généré du revenu en ligne</option>
+          <option>Je suis entrepreneur confirmé</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Ton budget pour te former <span class="req">*</span></label>
+        <select id="f-budget">
+          <option value="">Sélectionne une option</option>
+          <option>Moins de 200€</option>
+          <option>200€ – 400€</option>
+          <option>400€ – 600€</option>
+          <option>Plus de 600€</option>
+        </select>
+      </div>
+
+      <button class="btn-submit" onclick="submitForm()">
+        Envoyer ma candidature →
+      </button>
+      <p class="form-note">Tu es déjà prêt à commencer maintenant ?</p>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 : SUCCESS -->
+<div class="page" id="page-success">
+  <div class="hero">
+    <div class="places-badge">⭐ PLACES LIMITÉES</div>
+    <h1 class="hero-title">
+      <span class="line1">SAAS</span>
+      <span class="line2">ACADEMY</span>
+    </h1>
+    <p class="hero-sub">De l'idée à ton premier €. <strong>Sans bullshit.</strong></p>
+
+    <div class="success-card">
+      <div class="check-icon">✓</div>
+      <h3>Candidature envoyée !</h3>
+      <p>Merci. Envoie-nous un message sur WhatsApp pour accélérer le process.</p>
+      <a class="btn-whatsapp" id="wa-link" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Écrire sur WhatsApp
+      </a>
+
+      <div class="action-cards">
+        <a href="#" class="action-card" onclick="showPage('page-payment'); return false;">
+          <div class="action-icon purple">🚀</div>
+          <div class="action-card-text">
+            <strong>Rejoindre SaaS Academy</strong>
+            <span>Accède au programme complet maintenant.</span>
+          </div>
+          <span class="action-card-arrow">→</span>
+        </a>
+        <a href="#" class="action-card">
+          <div class="action-icon pink">📞</div>
+          <div class="action-card-text">
+            <strong>Réserver un appel découverte</strong>
+            <span>On t'accompagne et répond à tes questions.</span>
+          </div>
+          <span class="action-card-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="motivated-card">
+        <div class="fire">🔥</div>
+        <h4>T'es extra motivé ?</h4>
+        <p>Si tu veux passer à l'action tout de suite, on a une offre pour toi.</p>
+        <div class="motivated-btns">
+          <button class="btn-later">Pas maintenant</button>
+          <button class="btn-now" onclick="showPage('page-payment')">Oui, carrément !</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3 : PAIEMENT -->
+<div class="page" id="page-payment">
+  <div class="hero">
+    <div class="payment-card">
+      <div class="payment-icon">🚀</div>
+      <h2>Débloque SaaS Academy</h2>
+      <p class="sub">Un seul paiement. Accès à vie. Zéro excuse.</p>
+
+      <div class="price-box">
+        <div class="invest-badge">✨ OFFRE DE LANCEMENT</div>
+        <div class="price-display">
+          <span class="price-old">397€</span>
+          <span class="price-new">197<sup>€</sup></span>
+        </div>
+        <p class="price-note">Accès à vie · Sans abonnement · Sans frais cachés</p>
+      </div>
+
+      <ul class="features-list">
+        <li><span class="check">✓</span> 22 Modules complets — de l'idée au scale</li>
+        <li><span class="check">✓</span> 8 Vidéos clés face caméra & tutos écran</li>
+        <li><span class="check">✓</span> La méthode exacte utilisée pour construire un vrai SaaS</li>
+        <li><span class="check">✓</span> Templates & ressources prêts à l'emploi</li>
+        <li><span class="check">✓</span> 50 idées SaaS validées + scripts de prospection</li>
+        <li><span class="check">✓</span> Mises à jour illimitées à vie</li>
+        <li><span class="check">✓</span> Accès communauté privée</li>
+      </ul>
+
+      <div class="email-field">
+        <label>TON EMAIL</label>
+        <div class="email-input-wrap">
+          <span class="mail-icon">✉</span>
+          <input type="email" placeholder="ton@email.com" />
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:6px;">Ton code d'accès sera envoyé ici après le paiement.</p>
+      </div>
+
+      <a class="promo-link">🏷 Tu as un code promo ?</a>
+
+      <button class="btn-pay">💳 Payer 197€</button>
+      <p class="security-note">🔒 SÉCURISÉ PAR STRIPE · CHIFFREMENT 256-BIT</p>
+
+      <div class="payment-footer">
+        <a href="#">Déjà membre ? Se connecter →</a>
+        <a onclick="showPage('page-success')">← Retour</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  // ✅ EMAILJS — À configurer une fois sur emailjs.com (gratuit)
+  // 1. Crée un compte sur emailjs.com
+  // 2. Crée un "Email Service" (Gmail)
+  // 3. Crée un "Email Template" avec les variables ci-dessous
+  // 4. Remplace les 3 valeurs suivantes par les tiennes
+  const EMAILJS_PUBLIC_KEY = 'lZMJrjb3w7vlazhrY';
+  const EMAILJS_SERVICE_ID = 'service_4z5878b';
+  const EMAILJS_TEMPLATE_ID = 'template_1h4lq07';
+
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
+  async function submitForm() {
+    const prenom = document.getElementById('f-prenom').value.trim();
+    const age = document.getElementById('f-age').value.trim();
+    const tel = document.getElementById('f-tel').value.trim();
+    const xp = document.getElementById('f-xp').value;
+    const budget = document.getElementById('f-budget').value;
+
+    if (!prenom || !age || !tel || !xp || !budget) {
+      alert('Remplis tous les champs pour continuer.');
+      return;
+    }
+
+    // 1. Prépare le message WhatsApp
+    const msg = encodeURIComponent(`Salut ! Je viens de candidater pour SaaS Academy.\n\nPrénom : ${prenom}\nTéléphone : ${tel}\nExpérience : ${xp}\nBudget : ${budget}`);
+    const waUrl = `https://wa.me/33787881855?text=${msg}`;
+    document.getElementById('wa-link').href = waUrl;
+
+    // 2. Envoie le mail à iwan.developpeur@gmail.com
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_email: 'iwan.developpeur@gmail.com',
+        prenom: prenom,
+        age: age,
+        telephone: tel,
+        experience: xp,
+        budget: budget,
+        date: new Date().toLocaleString('fr-FR'),
+      });
+    } catch(e) {
+      console.log('EmailJS non configuré — candidature enregistrée quand même.');
+    }
+
+    // 3. Affiche la page succès
+    showPage('page-success');
+
+    // 4. Ouvre WhatsApp automatiquement
+    setTimeout(() => {
+      window.open(waUrl, '_blank');
+    }, 800);
+  }
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
