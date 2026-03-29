@@ -439,22 +439,14 @@
           </div>
           <span class="action-card-arrow">→</span>
         </a>
-        <a href="#" class="action-card">
-          <div class="action-icon pink">📞</div>
-          <div class="action-card-text">
-            <strong>Réserver un appel découverte</strong>
-            <span>On t'accompagne et répond à tes questions.</span>
-          </div>
-          <span class="action-card-arrow">→</span>
-        </a>
       </div>
 
-      <div class="motivated-card">
+      <div class="motivated-card" id="motivated-card">
         <div class="fire">🔥</div>
         <h4>T'es extra motivé ?</h4>
         <p>Si tu veux passer à l'action tout de suite, on a une offre pour toi.</p>
         <div class="motivated-btns">
-          <button class="btn-later">Pas maintenant</button>
+          <button class="btn-later" onclick="document.getElementById('motivated-card').style.display='none'">Pas maintenant</button>
           <button class="btn-now" onclick="showPage('page-payment')">Oui, carrément !</button>
         </div>
       </div>
