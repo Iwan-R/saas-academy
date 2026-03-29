@@ -490,17 +490,17 @@
       </ul>
 
       <div class="email-field">
-        <label>TON EMAIL</label>
+        <label>TON EMAIL <span style="color:var(--pink)">*</span></label>
         <div class="email-input-wrap">
           <span class="mail-icon">✉</span>
-          <input type="email" placeholder="ton@email.com" />
+          <input type="email" id="payment-email" placeholder="ton@email.com" required />
         </div>
         <p style="font-size:11px;color:var(--muted);margin-top:6px;">Ton code d'accès sera envoyé ici après le paiement.</p>
       </div>
 
       <a class="promo-link">🏷 Tu as un code promo ?</a>
 
-      <button class="btn-pay" onclick="window.location.href='https://buy.stripe.com/5kQ14m2LXd2FcIXfJKbAs00'">💳 Payer 197€</button>
+      <button class="btn-pay" onclick="payNow()">💳 Payer 197€</button>
       <p class="security-note">🔒 SÉCURISÉ PAR STRIPE · CHIFFREMENT 256-BIT</p>
 
       <div class="payment-footer">
@@ -565,7 +565,15 @@
     }, 800);
   }
 
-  function showPage(id) {
+  function payNow() {
+    const email = document.getElementById('payment-email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('payment-email').style.borderColor = 'var(--pink)';
+      document.getElementById('payment-email').focus();
+      return;
+    }
+    window.location.href = `https://buy.stripe.com/5kQ14m2LXd2FcIXfJKbAs00?prefilled_email=${encodeURIComponent(email)}`;
+  }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
