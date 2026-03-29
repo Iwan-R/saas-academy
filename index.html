@@ -574,6 +574,8 @@
     }
     window.location.href = `https://buy.stripe.com/5kQ14m2LXd2FcIXfJKbAs00?prefilled_email=${encodeURIComponent(email)}`;
   }
+
+  function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
